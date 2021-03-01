@@ -15,11 +15,11 @@ A multiarch [YTDL-Material] Docker image, based on [Alpine Linux].
 
 ```
 docker run --detach \
-           -p 8080:8080 \
+           -p 17442:17442 \
            -it padhihomelab/ytdl
 ```
 
-Runs `ytdl` server on port 17442.
+Serves YTDL-Material web app on port 17442.
 
 _<More details to be added soon>_
 
