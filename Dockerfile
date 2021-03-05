@@ -30,14 +30,23 @@ COPY --from=app-builder \
      /build/backend/public \
      /app/public
 
+COPY entrypoint.d/*.sh \
+     /etc/docker-entrypoint.d/
+COPY start.sh \
+     /usr/local/bin/start-ytdl
 
-RUN apk add --no-cache --update \
+
+RUN chmod +x /etc/docker-entrypoint.d/*.sh \
+             /usr/local/bin/start-ytdl \
+ && apk add --no-cache --update \
             ffmpeg \
             npm \
+            python3 \
  && apk add --no-cache --update \
             --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing/ \
             atomicparsley \
  && cd /app \
+ && rm -rf appdata audio subscriptions users video \
  && npm install
 
 
@@ -45,7 +54,7 @@ EXPOSE 17442
 VOLUME [ "/audio", "/config", "/subs", "/users", "/video" ]
 
 
-CMD [ "node", "app.js" ]
+CMD [ "start-ytdl" ]
 
 
 HEALTHCHECK --start-period=10s --interval=30s --timeout=5s --retries=3 \
