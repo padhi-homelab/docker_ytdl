@@ -1,7 +1,7 @@
 FROM alpine:3.13 as app-builder
 
 
-ARG YTDLM_COMMIT_SHA=f32b3947150f577e214d05bd9d67026612b22978
+ARG YTDLM_COMMIT_SHA=addd54fefd062382b65efe33d9bacb0ee3b80182
 
 
 RUN apk add --no-cache --update \
@@ -21,6 +21,9 @@ RUN apk add --no-cache --update \
 
 
 FROM padhihomelab/alpine-base:3.13_0.19.0_0.2
+
+
+ENV NO_UPDATE_NOTIFIER=true
 
 
 COPY --from=app-builder \
@@ -47,6 +50,7 @@ RUN chmod +x /etc/docker-entrypoint.d/*.sh \
             atomicparsley \
  && cd /app \
  && rm -rf appdata audio subscriptions users video \
+ && npm install forever -g \
  && npm install
 
 

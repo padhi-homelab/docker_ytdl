@@ -1,4 +1,4 @@
 #!/bin/sh
 
 cd /app
-node app.js
+forever app.js
