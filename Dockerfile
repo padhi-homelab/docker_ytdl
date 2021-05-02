@@ -1,7 +1,7 @@
-FROM alpine:3.13 as app-builder
+FROM alpine:3.13 as builder
 
 
-ARG YTDLM_COMMIT_SHA=addd54fefd062382b65efe33d9bacb0ee3b80182
+ARG YTDLM_COMMIT_SHA=6d318234b63af6c66bc34454acd77368846c8318
 
 
 RUN apk add --no-cache --update \
@@ -20,16 +20,16 @@ RUN apk add --no-cache --update \
  && ng build --source-map=false --prod
 
 
-FROM padhihomelab/alpine-base:3.13_0.19.0_0.2
+FROM padhihomelab/alpine-base:3.13.5_0.19.0_0.2
 
 
 ENV NO_UPDATE_NOTIFIER=true
 
 
-COPY --from=app-builder \
+COPY --from=builder \
      /ytdlm/backend \
      /app
-COPY --from=app-builder \
+COPY --from=builder \
      /build/backend/public \
      /app/public
 
