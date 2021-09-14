@@ -1,7 +1,7 @@
 FROM alpine:3.14 as builder
 
 
-ARG YTDLM_COMMIT_SHA=53216246049ef839437a84a31461d7be3be2bf9d
+ARG YTDLM_COMMIT_SHA=d014c6facb0b899fec2d424ee722001032d2c6ab
 
 
 RUN apk add --no-cache --update \
@@ -20,7 +20,7 @@ RUN apk add --no-cache --update \
  && ng build --source-map=false --prod
 
 
-FROM padhihomelab/alpine-base:3.14.1_0.19.0_0.2
+FROM padhihomelab/alpine-base:3.14.2_0.19.0_0.2
 
 
 ENV NO_UPDATE_NOTIFIER=true
@@ -33,13 +33,13 @@ COPY --from=builder \
      /build/backend/public \
      /app/public
 
-COPY user-entrypoint.d \
-     /etc/docker-entrypoint.d/99-user
+COPY entrypoint-scripts \
+     /etc/docker-entrypoint.d/99-extra-scripts
 COPY start.sh \
      /usr/local/bin/start-ytdl
 
 
-RUN chmod +x /etc/docker-entrypoint.d/99-user/*.sh \
+RUN chmod +x /etc/docker-entrypoint.d/99-extra-scripts/*.sh \
              /usr/local/bin/start-ytdl \
  && apk add --no-cache --update \
             ffmpeg \
