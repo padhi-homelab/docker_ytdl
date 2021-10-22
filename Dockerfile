@@ -1,7 +1,7 @@
 FROM alpine:3.14 as builder
 
 
-ARG YTDLM_COMMIT_SHA=d014c6facb0b899fec2d424ee722001032d2c6ab
+ARG YTDLM_COMMIT_SHA=88cc8d0e811e197f8c3795003542c3366082ceb3
 
 
 RUN apk add --no-cache --update \
@@ -17,13 +17,14 @@ RUN apk add --no-cache --update \
  && npm install \
  && cp /ytdlm/angular.json /ytdlm/tsconfig.json . \
  && cp -r /ytdlm/src . \
- && ng build --source-map=false --prod
+ && npm run build -- --source-map=false --prod
 
 
 FROM padhihomelab/alpine-base:3.14.2_0.19.0_0.2
 
 
-ENV NO_UPDATE_NOTIFIER=true
+ENV NO_UPDATE_NOTIFIER=true \
+    PM2_HOME=/app/pm2
 
 
 COPY --from=builder \
@@ -50,7 +51,7 @@ RUN chmod +x /etc/docker-entrypoint.d/99-extra-scripts/*.sh \
             atomicparsley \
  && cd /app \
  && rm -rf appdata audio subscriptions users video \
- && npm install forever -g \
+ && npm install pm2 -g \
  && npm install
 
 

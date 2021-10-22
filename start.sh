@@ -1,4 +1,4 @@
 #!/bin/sh
 
 cd /app
-forever app.js
+pm2-runtime pm2.config.js
