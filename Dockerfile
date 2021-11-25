@@ -1,4 +1,4 @@
-FROM alpine:3.14 as builder
+FROM alpine:3.15.0 as builder
 
 
 ARG YTDLM_COMMIT_SHA=88cc8d0e811e197f8c3795003542c3366082ceb3
